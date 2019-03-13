@@ -2,6 +2,7 @@
 using namespace std;
 
 typedef long long ll;
+typedef long double ld;
 typedef unordered_map<int, int> umapii;
 typedef unordered_map<int, bool> umapib;
 typedef unordered_map<string, int> umapsi;
@@ -24,9 +25,18 @@ typedef set<int> seti;
 #define f first
 #define s second
 #define MOD 1000000007
+#define PI acos(-1)
 
-#define MAX 1000000LL
-#define BOUND 1000000000LL
+#define MAX 1000000
+#define BOUND 1000000000
+
+void print(vector<int> &v, int n){
+	cout << v[0]*v[n-1] << " ";
+	for(int i = 1; i < n; i++){
+		cout << v[i]*v[i-1] << " ";
+	}
+	cout << endl;
+}
 
 int main(){
 	ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
@@ -34,91 +44,52 @@ int main(){
 	bool sieve[MAX];
 	sieve[0] = false;
 	sieve[1] = false;
-	for(ll i = 2; i < MAX; i++) sieve[i] = true;
-
-	for(ll i = 2; i < MAX; i++){
+	for(int i = 2; i < MAX; i++) sieve[i] = true;
+	for(int i = 2; i*i < MAX; i++){
 		if(sieve[i]){
-			ll k = i;
-			while(1){
-				if(i*k > MAX) break;
-				sieve[i*k] = false;
-				k++;
-			}
+			for(int j = i*i; j < MAX; j += i) sieve[j] = false;
 		}
 	}
 
-	vector<ll> prime;
-	for(ll i = 0; i < MAX; i++){
-		if(sieve[i]){
-			if(prime.size() > 0 && i*prime[prime.size()-1] > BOUND){
-				break;
-			}
-			prime.pb(i);
-		}
+	vector<int> prime;
+	for(int i = 2; i < MAX; i++){
+		if(sieve[i]) prime.pb(i);
 	}
 
-	ll m = 900;
-	ll helper[m][m];
-	for(ll j = 0; j < m; j++){
-		for(ll i = j+1; i < m; i++) helper[i-1][j] = prime[i]*prime[j];
+	vector<int> odd;
+	for(int i = 0; i < 5; i++){
+		odd.pb(prime[i]);
+	}
+	for(int i = 5; i+1 < prime.size(); i += 2){
+		odd.pb(3);
+		odd.pb(prime[i]);
+		odd.pb(5);
+		odd.pb(prime[i+1]);
 	}
 
-	ll t, n;
+	vector<int> even;
+	for(int i = 0; i < 4; i++){
+		even.pb(prime[i]);
+	}
+	for(int i = 4; i+1 < prime.size(); i += 2){
+		even.pb(3);
+		even.pb(prime[i]);
+		even.pb(5);
+		even.pb(prime[i+1]);
+	}
+
+	int t, n;
 	cin >> t;
 	while(t--){
 		cin >> n;
-		ll k = n;
-
-		if(n == 3){
-			cout << "6 10 15" << endl;
-			continue;
+		if(n < 3000){
+			print(prime, n);
 		}
-
-		vector<ll> answer;
-		ll i = 0;
-		ll j = 0;
-		ll direction = 3;
-		while(k--){
-			if(direction == 3){
-				answer.pb(helper[i][j]);
-				i++;
-				direction = 2;
-			}
-			else if(direction == 2){
-				if(i != m-1){
-					answer.pb(helper[i][j]);
-					j++;
-					direction = 3;
-				}
-				else{
-					answer.pb(helper[i][j]);
-					j -= 2;
-					direction = 1;
-				}
-			}
-			else if(direction == 1){
-				answer.pb(helper[i][j]);
-				i--;
-				direction = 4;
-			}
-			else if(direction == 4){
-				if(i != 1){
-					answer.pb(helper[i][j]);
-					j--;
-					direction = 1;
-				}
-				else{
-					answer.pb(helper[i][j]);
-					i -= 2;
-					direction = 3;
-				}
-			}
+		else if(n%2 == 0){
+			print(even, n);
 		}
-
-		answer[0] = 2*prime[900];
-		answer[n-1] *= 2;
-
-		for(ll i = 0; i < n; i++) cout << answer[i] << " ";
-		cout << endl;
+		else{
+			print(odd, n);
+		}
 	}
 }
