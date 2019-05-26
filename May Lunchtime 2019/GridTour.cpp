@@ -30,13 +30,12 @@ typedef set<int> seti;
 int main(){
     ios_base::sync_with_stdio(0); cin.tie(0); cout.tie(0);
 
-    int maxEl = 0;
-    for(double n = 1; n <= 2000; n++){
-        for(double k = n+1; k <= 1000000000; k++){
-            double x = ceil(k/n);
-            maxEl = max(maxEl, (int)floor(n-x));
-        }
+    ll t;
+    cin >> t;
+    ll n, m, k;
+    while(t--){
+        cin >> n >> m >> k;
+        if(__gcd(n, k) == 1 && __gcd(m, k) == 1) cout << n*m << endl;
+        else cout << -1 << endl;
     }
-
-    cout << maxEl << endl;
 }

@@ -1,18 +1,5 @@
 #include <bits/stdc++.h>
-#include <ext/pb_ds/assoc_container.hpp>
-#include <ext/pb_ds/tree_policy.hpp>
 using namespace std;
-using namespace __gnu_pbds;
-
-typedef
-tree<
-  int,
-  null_type,
-  less<int>,
-  rb_tree_tag,
-  tree_order_statistics_node_update>
-set_t;
-
 
 typedef long long ll;
 typedef long double ld;
@@ -45,31 +32,29 @@ int main(){
 
     int t;
     cin >> t;
-
+    string s;
+    int helper[26];
     while(t--){
-        int n, k;
-        cin >> n >> k;
-        int *input = new int[n];
-        for(int i = 0; i < n; i++){
-            cin >> input[i];
+        for(int i = 0; i < 26; i++){
+            helper[i] = 0;
+        }
+        cin >> s;
+        for(int i = 0; i < s.length(); i++){
+            helper[s[i]-'a']++;
         }
 
-        int total = 0;
-
-        for(int i = 0; i < n; i++){
-            map<int, int> mp;
-            int x = 0;
-            for(int j = i; j < n; j++){
-                mp[input[j]]++;
-                x = max(x, input[j]);
-
-                int f = mp[x];
-                if(mp.find(f) != mp.end()){
-                    total++;
-                }
-            }
+        int NumOdd = 0;
+        for(int i = 0; i < 26; i++){
+            if(helper[i]%2 == 1) NumOdd++;
         }
 
-        cout << total << endl;
+        if(s.length()%2 == 0){
+            if(NumOdd > 2 || NumOdd == 0) cout << "!DPS" << endl;
+            else cout << "DPS" << endl;
+        }
+        else{
+            if(NumOdd > 3) cout << "!DPS" << endl;
+            else cout << "DPS" << endl;
+        }
     }
 }
